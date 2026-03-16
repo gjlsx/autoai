@@ -1,0 +1,9 @@
+{
+  "workers": [
+    {
+      "target": "codex",
+      "port": 9003,
+      "rest_url": "http://127.0.0.1:49818"
+    }
+  ]
+}

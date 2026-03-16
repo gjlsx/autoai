@@ -1,0 +1,71 @@
+{
+  "name": "@trmquang93/remotelab",
+  "version": "1.1.0",
+  "description": "Remote browser access to any CLI dev tool (Claude, Copilot, Codex, Cline and more) via HTTPS",
+  "type": "module",
+  "license": "MIT",
+  "author": "trmquang93",
+  "homepage": "https://github.com/trmquang93/remotelab#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/trmquang93/remotelab.git"
+  },
+  "bugs": {
+    "url": "https://github.com/trmquang93/remotelab/issues"
+  },
+  "keywords": [
+    "claude",
+    "claude-code",
+    "copilot",
+    "codex",
+    "cline",
+    "ai",
+    "coding-assistant",
+    "multi-tool",
+    "remote",
+    "ttyd",
+    "terminal",
+    "proxy",
+    "ssh",
+    "macos"
+  ],
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "os": [
+    "darwin",
+    "linux"
+  ],
+  "bin": {
+    "remotelab": "cli.js"
+  },
+  "files": [
+    "cli.js",
+    "auth-proxy.mjs",
+    "chat-server.mjs",
+    "generate-token.mjs",
+    "setup.sh",
+    "start.sh",
+    "stop.sh",
+    "claude-ttyd-session",
+    "lib/",
+    "chat/",
+    "templates/",
+    "static/",
+    "LICENSE",
+    "README.md",
+    "docs/"
+  ],
+  "scripts": {
+    "start": "node auth-proxy.mjs",
+    "chat": "node chat-server.mjs",
+    "stop": "./stop.sh",
+    "setup": "./setup.sh",
+    "generate-token": "node generate-token.mjs",
+    "prepublishOnly": "chmod +x cli.js setup.sh start.sh stop.sh claude-ttyd-session"
+  },
+  "dependencies": {
+    "web-push": "^3.6.7",
+    "ws": "^8.19.0"
+  }
+}

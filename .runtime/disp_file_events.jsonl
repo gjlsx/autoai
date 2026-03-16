@@ -1,0 +1,2 @@
+{"event": "session_started", "source": "pty", "ai": "codex", "task_id": null, "seq": 1, "ts": 1772439259, "text": "spawned cli: D:\\work\\python\\py310\\python.exe scripts/mock_ai_cli.py (app=D:\\work\\python\\py310\\python.exe)"}
+{"event": "output", "source": "pty", "ai": "codex", "task_id": null, "seq": 2, "ts": 1772439260, "text": "\u001b[2J\u001b[m\u001b[HMOCK_AI_READY\r\n\u001b]0;D:\\work\\python\\py310\\python.exe\u0007\u001b[?25h"}

@@ -1,0 +1,27 @@
+{
+  "platform": "nt",
+  "results": [
+    {
+      "name": "pywinpty",
+      "success": true,
+      "latency_ms": 122,
+      "detail": "spawn/write/read OK via winpty.PTY",
+      "error": ""
+    },
+    {
+      "name": "node-pty",
+      "success": true,
+      "latency_ms": 3395,
+      "detail": "spawn/write/read OK via node-pty",
+      "error": ""
+    },
+    {
+      "name": "native-conpty",
+      "success": true,
+      "latency_ms": 9,
+      "detail": "CreatePseudoConsole/ClosePseudoConsole OK",
+      "error": ""
+    }
+  ],
+  "recommended": "pywinpty"
+}

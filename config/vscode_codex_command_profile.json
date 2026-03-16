@@ -1,0 +1,21 @@
+{
+  "focus_commands": [
+    "chatgpt.openSidebar",
+    "chatgpt.sidebarView.open",
+    "chatgpt.sidebarView.focus",
+    "chat.action.focus",
+    "workbench.action.chat.focusInput"
+  ],
+  "input_command_candidates": [
+    "chatgpt.addToThread",
+    "codex.addToThread",
+    "chatgpt.ask"
+  ],
+  "copy_commands": [
+    "workbench.action.chat.copyAll",
+    "workbench.action.chat.copyItem"
+  ],
+  "copy_wait_ms": 300,
+  "stream_fallback_output": true,
+  "stream_fallback_text": "stream observed; response text copy unavailable"
+}

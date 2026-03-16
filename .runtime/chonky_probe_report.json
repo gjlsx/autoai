@@ -1,0 +1,30 @@
+{
+  "repo_path": "D:\\work\\aiwork\\autoai\\.runtime\\third_party\\vscode-chonky-remote-pilot",
+  "rest_url": "http://127.0.0.1:49818",
+  "repo_eval": {
+    "repo_exists": true,
+    "register_tool": true,
+    "wait_for_message": true,
+    "send_message": true,
+    "loop_instruction": true,
+    "supports_input_output_via_tool": true
+  },
+  "runtime_eval": {
+    "rest_reachable": true,
+    "commands_total": 3366,
+    "chonky_commands": [],
+    "vscode_chat_commands": [
+      "workbench.action.chat.focusInput",
+      "workbench.action.chat.submit",
+      "chatgpt.sidebarView.focus"
+    ],
+    "error": ""
+  },
+  "decision": {
+    "usable_for_current_pipeline": false,
+    "reasons": [
+      "chonky_extension_not_active_in_current_vscode",
+      "fallback_to_task2_recommended"
+    ]
+  }
+}

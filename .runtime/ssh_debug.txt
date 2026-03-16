@@ -1,0 +1,3 @@
+Warning: Permanently added '34.101.230.107' (ECDSA) to the list of known hosts.
+GetConsoleMode on STD_INPUT_HANDLE failed with 6
+
