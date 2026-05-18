@@ -1,0 +1,16 @@
+def task_t3():
+    """Sum even digits of 2907: 2+0 = 2"""
+    n = 2907
+    result = sum(int(d) for d in str(n) if int(d) % 2 == 0)
+    return result
+
+
+if __name__ == "__main__":
+    result = task_t3()
+    print(f"agent: claude")
+    print(f"tasks: t3")
+    print(f"results:")
+    print(f"t3={result}")
+    print(f"subtotal={result}")
+    assert result == 2, f"Expected 2, got {result}"
+    print("t3 PASS")

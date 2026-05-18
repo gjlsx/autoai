@@ -1,0 +1,16 @@
+def task_t2():
+    """Find the 2nd number in sorted [50, 10, 40, 20, 30] -> sorted [10,20,30,40,50] -> index 1 = 20"""
+    nums = [50, 10, 40, 20, 30]
+    result = sorted(nums)[1]
+    return result
+
+
+if __name__ == "__main__":
+    result = task_t2()
+    print(f"agent: claude")
+    print(f"tasks: t03171000.t2")
+    print(f"results:")
+    print(f"t2={result}")
+    print(f"subtotal={result}")
+    assert result == 20, f"Expected 20, got {result}"
+    print("t2 PASS")

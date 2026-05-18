@@ -3,9 +3,12 @@ import re
 import shlex
 import subprocess
 import sys
+import json
 import threading
 import tkinter as tk
 import tkinter.ttk as ttk
+import urllib.request
+import urllib.error
 from pathlib import Path
 from tkinter import messagebox
 from tkinter.scrolledtext import ScrolledText
@@ -15,6 +18,7 @@ import pymysql
 from tools.port_utils import find_port, list_listening_ports, find_pids_by_port_or_pid, kill_process
 from tools.vscode_utils import get_vscode_instances
 from tools.timego import timer
+from test_codex_paste_ui import send_message_to_codex_ui
 
 
 DEFAULT_AI_TARGET = "codex"
@@ -182,8 +186,10 @@ class MatrixUI:
         top_bar.grid(row=0, column=0, sticky="ew")
         top_bar.grid_columnconfigure(0, weight=1)
 
-        buttons_row3 = tk.Frame(top_bar)
-        buttons_row3.pack(anchor="w")
+        buttons_row1 = tk.Frame(top_bar)
+        buttons_row1.pack(anchor="w", pady=(0, 4))
+        buttons_row2 = tk.Frame(top_bar)
+        buttons_row2.pack(anchor="w")
 
         input_row = tk.Frame(parent, padx=8, pady=6)
         input_row.grid(row=1, column=0, sticky="ew")
@@ -206,7 +212,7 @@ class MatrixUI:
             output_box.delete("1.0", tk.END)
             output_box.configure(state="disabled")
 
-        tk.Button(buttons_row3, text="清除輸出框", width=14, command=_clear_output).pack(side=tk.LEFT, padx=4)
+        tk.Button(buttons_row2, text="清除輸出框", width=14, command=_clear_output).pack(side=tk.LEFT, padx=4)
 
         def _log(msg: str, color: str = None):
             def _do():
@@ -280,54 +286,63 @@ class MatrixUI:
 
             self.root.after(0, _ask_and_kill)
 
-        btn_find = tk.Button(input_row, text="查找端口", width=12, command=lambda: self.run_in_thread(_find_port))
-        btn_find.grid(row=0, column=1, sticky="e", padx=(8, 4))
+        btn_find = tk.Button(buttons_row1, text="查找端口", width=12, command=lambda: self.run_in_thread(_find_port))
+        btn_find.pack(side=tk.LEFT, padx=4)
         
-        btn_kill = tk.Button(input_row, text="刪除端口", width=12, command=lambda: self.run_in_thread(_kill_port))
-        btn_kill.grid(row=0, column=2, sticky="e", padx=(0, 4))
+        btn_kill = tk.Button(buttons_row1, text="刪除端口", width=12, command=lambda: self.run_in_thread(_kill_port))
+        btn_kill.pack(side=tk.LEFT, padx=4)
 
-        def _test_codex_job():
-            _log("=== 定時測試任務啟動 ===")
-            _log("1. 正在啟動 Codex...")
-            self.run_one_click(["start"])
-            
-            questions = [
-                "pls answer: 1+2=",
-                "pls answer: 2+4=",
-                "pls answer: 4+6="
-            ]
-            
-            def send_q(idx):
-                if idx >= len(questions):
-                    _log("測試任務結束。", color="#2E7D32")
+        def _test_rest_job():
+            _log("=== 測試發送 REST 消息到 VSCode ===")
+            cfg_path = Path(__file__).resolve().parent / "config" / "vscode_rest_targets.json"
+            if not cfg_path.exists():
+                _log(f"[錯誤] 找不到設定檔: {cfg_path}", color="#D32F2F")
+                return
+                
+            try:
+                cfg = json.loads(cfg_path.read_text(encoding="utf-8"))
+                workers = cfg.get("workers", [])
+                if not workers:
+                    _log("[錯誤] vscode_rest_targets.json 中沒有 workers 設定", color="#D32F2F")
                     return
+            except Exception as e:
+                _log(f"[錯誤] 讀取設定檔失敗: {e}", color="#D32F2F")
+                return
+
+            msg = "hello, 1+2=?"
+            _log(f"準備發送測試消息: {msg}")
+            
+            for worker in workers:
+                target = worker.get("target", "unknown")
+                rest_url = worker.get("rest_url")
                 
-                msg = questions[idx]
-                _log(f"-> 正在發送第 {idx+1} 次消息: {msg}")
-                self.input_var.set(f"codex:{msg}")
-                self.send_task()
+                if not rest_url:
+                    _log(f"[跳過] 目標 {target} 沒有設定 rest_url", color="#555555")
+                    continue
+                    
+                _log(f"-> 正在發送到 {target} ({rest_url}) ...")
                 
-                # Setup next question in 15 seconds using thread timer
-                threading.Timer(15.0, lambda: self.run_in_thread(send_q, idx+1)).start()
-                
-            # Initial wait before starting first question
-            threading.Timer(15.0, lambda: self.run_in_thread(send_q, 0)).start()
+                try:
+                    # 使用已經寫好驗證過的方法發送
+                    send_message_to_codex_ui(msg, rest_url=rest_url)
+                    _log(f"[成功] 目標 {target} 發送完成", color="#2E7D32")
+                except Exception as e:
+                    _log(f"[錯誤] 目標 {target} 發送時發生異常: {e}", color="#D32F2F")
 
         def _start_test_task():
-            _log("=== 設定 15 秒間隔定時測試任務 ===")
-            self.run_in_thread(_test_codex_job)
+            self.run_in_thread(_test_rest_job)
 
-        btn_test = tk.Button(input_row, text="測試發送", width=12, command=_start_test_task)
-        btn_test.grid(row=0, column=3, sticky="e", padx=(8, 4))
+        btn_test = tk.Button(buttons_row1, text="測試發送", width=12, command=_start_test_task)
+        btn_test.pack(side=tk.LEFT, padx=4)
 
         send_btn = tk.Button(input_row, text="發送", width=12, command=lambda: self.run_in_thread(_find_port))
-        send_btn.grid(row=0, column=4, sticky="e")
+        send_btn.grid(row=0, column=1, sticky="e")
         
         input_entry.bind("<Return>", lambda _e: self.run_in_thread(_find_port))
 
         hint = tk.Label(
             input_row,
-            text="輸入端口 (如 8080) 或 PID，然後發送（查找）或在上方刪除",
+            text="輸入端口 (如 8080) 或 PID，然後發送（查找）",
             anchor="w",
             fg="#555555",
         )

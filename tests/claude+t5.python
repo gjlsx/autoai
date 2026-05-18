@@ -1,0 +1,17 @@
+def task_t5():
+    """Multiply t1_result * t3_result: 17 * 2 = 34"""
+    t1_result = 17  # Sum digits of 5732 = 17 (done by cline)
+    t3_result = 2   # Sum even digits of 2907 = 2 (done by claude)
+    result = t1_result * t3_result
+    return result
+
+
+if __name__ == "__main__":
+    result = task_t5()
+    print(f"agent: claude")
+    print(f"tasks: t5")
+    print(f"results:")
+    print(f"t5={result}")
+    print(f"subtotal={result}")
+    assert result == 34, f"Expected 34, got {result}"
+    print("t5 PASS")

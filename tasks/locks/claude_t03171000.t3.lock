@@ -1,0 +1,8 @@
+agent: claude
+task: t03171000.t3
+owner: claude
+project: autoai-sort-0317
+created_at: 260317100800
+updated_at: 260317100800
+status: doing
+log: tasks/claude/t03171000.t3.md

@@ -1,0 +1,16 @@
+def task_t4():
+    """Reverse digits of 6318: 6318 -> 8136"""
+    n = 6318
+    result = int(str(n)[::-1])
+    return result
+
+
+if __name__ == "__main__":
+    result = task_t4()
+    print(f"agent: claude")
+    print(f"tasks: t4")
+    print(f"results:")
+    print(f"t4={result}")
+    print(f"subtotal={result}")
+    assert result == 8136, f"Expected 8136, got {result}"
+    print("t4 PASS")

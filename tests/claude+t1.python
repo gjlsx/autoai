@@ -1,0 +1,10 @@
+def task_t1():
+    """Digit sum of 4213: 4+2+1+3 = 10"""
+    return sum(int(d) for d in str(4213))
+
+
+if __name__ == "__main__":
+    result = task_t1()
+    print(f"t1={result}")
+    assert result == 10, f"Expected 10, got {result}"
+    print("t1 PASS")
